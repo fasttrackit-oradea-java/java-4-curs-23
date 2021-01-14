@@ -1,9 +1,9 @@
 package ro.fasttrackit.curs21.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
+import java.util.List;
+
+import static javax.persistence.CascadeType.PERSIST;
 
 @Entity
 public class Transaction {
@@ -18,14 +18,37 @@ public class Transaction {
     @OneToOne
     private Account account;
 
-    public Transaction(String product, Type type, double amount, Account account) {
+    @ManyToOne(cascade = PERSIST)
+    private Category category;
+
+    @ManyToMany
+    private List<Label> labels;
+
+    public Transaction(String product, Type type, double amount,
+                       Account account, Category category) {
+        this(product, type, amount, account, category, List.of());
+    }
+
+    public Transaction(String product, Type type, double amount,
+                       Account account, Category category,
+                       List<Label> labels) {
         this.product = product;
         this.type = type;
         this.amount = amount;
         this.account = account;
+        this.category = category;
+        this.labels = labels;
     }
 
     public Transaction() {
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
     public String getProduct() {
@@ -66,5 +89,9 @@ public class Transaction {
 
     public void setAccount(Account account) {
         this.account = account;
+    }
+
+    public List<Label> getLabels() {
+        return labels;
     }
 }

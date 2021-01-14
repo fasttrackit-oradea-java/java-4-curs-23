@@ -13,7 +13,13 @@ function addNew() {
         headers: {
             'Content-Type': 'application/json'
         }
-    }).then(response => location.reload());
+    }).then(response => {
+        if (response.ok) {
+            location.reload()
+        } else {
+            alert()
+        }
+    });
 }
 
 function editTransaction(transactionIdToEdit) {
@@ -34,15 +40,17 @@ function editTransaction(transactionIdToEdit) {
     }).then(response => location.reload());
 }
 
-function addTransaction() {
-    if (transactionIdToEdit) {
-        editTransaction(transactionIdToEdit);
-    } else {
-        addNew();
-    }
-}
 
 $(document).ready(() => {
+    let transactionIdToEdit = null;
+
+    $('#add-transaction-button').click(function () {
+        if (transactionIdToEdit) {
+            editTransaction(transactionIdToEdit);
+        } else {
+            addNew();
+        }
+    });
 
     $('.fa-edit').click(function () {
         transactionIdToEdit = this.parentElement.id;
